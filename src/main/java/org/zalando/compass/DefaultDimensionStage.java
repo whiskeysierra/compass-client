@@ -6,6 +6,7 @@ import com.google.common.reflect.TypeToken;
 import org.zalando.riptide.Http;
 import org.zalando.riptide.capture.Capture;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
@@ -32,10 +33,9 @@ final class DefaultDimensionStage implements CompassClient.DimensionStage {
 
     @Override
     public CompassClient.DimensionStage withDimensions(final Map<String, Supplier<Object>> values) {
-        return new DefaultDimensionStage(http, key, ImmutableMap.<String, Supplier<Object>>builder()
-                .putAll(dimensions)
-                .putAll(values)
-                .build());
+        final HashMap<String, Supplier<Object>> copy = new HashMap<>(dimensions);
+        copy.putAll(values);
+        return new DefaultDimensionStage(http, key, ImmutableMap.copyOf(copy));
     }
 
     @Override

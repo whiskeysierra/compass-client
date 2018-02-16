@@ -17,7 +17,7 @@ public interface CompassClient {
     interface DimensionStage {
 
         default DimensionStage withDimension(final String id, final Object value) {
-            return withDimension(id, Suppliers.ofInstance(value));
+            return withDimension(id, () -> value);
         }
 
         default DimensionStage withDimension(final String id, final Supplier<Object> value) {

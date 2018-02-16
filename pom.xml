@@ -32,6 +32,7 @@
         <skipUnitTests>${skipTests}</skipUnitTests>
 
         <riptide.version>2.6.0</riptide.version>
+        <jackson.version>2.9.4</jackson.version>
     </properties>
 
     <dependencies>
@@ -44,11 +45,6 @@
             <groupId>com.google.gag</groupId>
             <artifactId>gag</artifactId>
             <version>1.0.1</version>
-        </dependency>
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>24.0-jre</version>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -83,11 +79,21 @@
         <!-- Jackson -->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-annotations</artifactId>
-            <version>2.9.2</version>
+            <version>${jackson.version}</version>
         </dependency>
 
         <!-- Testing -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>1.7.21</version>
+        </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -124,6 +130,22 @@
             <!-- see https://github.com/spring-projects/spring-boot/issues/6520 -->
             <version>2.0.93-beta</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.rest-driver</groupId>
+            <artifactId>rest-client-driver</artifactId>
+            <version>2.0.0</version>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.hamcrest</groupId>
+                    <artifactId>hamcrest-core</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.hamcrest</groupId>
+                    <artifactId>hamcrest-library</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
 

@@ -1,35 +1,59 @@
 package org.zalando.compass;
 
+import com.github.restdriver.clientdriver.ClientDriverRule;
+import org.junit.Rule;
 import org.junit.Test;
 import org.zalando.riptide.Http;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
-import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
-import static org.mockito.Mockito.mock;
+import static com.github.restdriver.clientdriver.RestClientDriver.giveResponse;
+import static com.github.restdriver.clientdriver.RestClientDriver.onRequestTo;
+import static java.util.Collections.emptyMap;
+import static org.hamcrest.Matchers.comparesEqualTo;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
+import static org.zalando.riptide.HttpBuilder.simpleRequestFactory;
 
 public final class CompassTest {
+
+    @Rule
+    public final ClientDriverRule driver = new ClientDriverRule();
+
+    private final ExecutorService executor = Executors.newSingleThreadExecutor();
+
+    private final Http http = Http.builder()
+            .configure(simpleRequestFactory(executor))
+            .baseUrl(driver.getBaseUrl())
+            .build();
 
     @Test
     public void shouldUseBuilder() {
         final CompassClient client = Compass.builder()
-                .http(mock(Http.class))
+                .http(http)
                 .defaultDimension("host", "localhost")
-                .defaultDimension("before", OffsetDateTime::now)
-                .defaultDimension("after", OffsetDateTime::now)
+                .defaultDimension("before", () -> OffsetDateTime.parse("2018-02-16T11:00:00+01:00"))
+                .defaultDimension("after", () -> OffsetDateTime.parse("2018-02-14T11:00:00+01:00"))
                 .build();
 
-        final CompassClient.DimensionStage root = client.search("tax-rate");
+        driver.addExpectation(onRequestTo("/keys/tax-rate/value")
+                .withParam("host", "localhost")
+                .withParam("country", "DE")
+                .withParam("before", "2018-02-16T11:00+01:00")
+                .withParam("after", "2018-02-15T11:00+01:00"),
+                giveResponse("{\"value\":0.19}", "application/json"));
 
-        final CompassClient.DimensionStage germany = root
-                .withDimension("country", "DE");
+        final Value<BigDecimal> taxRate = client.search("tax-rate")
+                .withDimension("country", "DE")
+                .withDimension("after", () -> OffsetDateTime.parse("2018-02-15T11:00:00+01:00"))
+                .readAs(BigDecimal.class)
+                .join();
 
-        final CompassClient.DimensionStage today = germany
-                .withDimension("after", OffsetDateTime::now);
-
-        final CompletableFuture<BigDecimal> taxRate = today.readAs(BigDecimal.class)
-                .thenApply(Value::getValue);
+        assertThat(taxRate.getDimensions(), is(emptyMap()));
+        assertThat(taxRate.getValue(), comparesEqualTo(new BigDecimal("0.19")));
     }
 
 }

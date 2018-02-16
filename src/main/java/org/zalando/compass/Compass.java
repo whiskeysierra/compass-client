@@ -17,7 +17,7 @@ public final class Compass {
     public interface DefaultDimensionStage {
 
         default DefaultDimensionStage defaultDimension(final String id, final Object value) {
-            return defaultDimension(id, Suppliers.ofInstance(value));
+            return defaultDimension(id, () -> value);
         }
 
         default DefaultDimensionStage defaultDimension(final String id, final Supplier<Object> value) {
