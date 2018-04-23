@@ -32,7 +32,7 @@
         <skipUnitTests>${skipTests}</skipUnitTests>
 
         <riptide.version>2.6.0</riptide.version>
-        <jackson.version>2.9.4</jackson.version>
+        <jackson.version>2.9.5</jackson.version>
     </properties>
 
     <dependencies>
