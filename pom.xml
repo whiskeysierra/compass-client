@@ -223,6 +223,7 @@
                         <exclude>**/*ComponentTest.java</exclude>
                     </excludes>
                     <skipTests>${skipUnitTests}</skipTests>
+                    <useFile>false</useFile>
                 </configuration>
             </plugin>
 
