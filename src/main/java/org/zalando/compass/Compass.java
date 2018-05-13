@@ -1,6 +1,5 @@
 package org.zalando.compass;
 
-import com.google.common.base.Suppliers;
 import org.zalando.riptide.Http;
 
 import java.util.Map;

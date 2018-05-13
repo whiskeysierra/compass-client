@@ -1,6 +1,5 @@
 package org.zalando.compass;
 
-import com.google.common.base.Suppliers;
 import com.google.common.reflect.TypeToken;
 
 import javax.annotation.concurrent.Immutable;
