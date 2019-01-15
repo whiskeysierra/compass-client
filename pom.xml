@@ -23,7 +23,7 @@
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <skipTests>false</skipTests>
         <skipUnitTests>${skipTests}</skipUnitTests>
-        <riptide.version>2.10.1</riptide.version>
+        <riptide.version>2.11.0</riptide.version>
         <jackson.version>2.9.8</jackson.version>
     </properties>
     <dependencies>
