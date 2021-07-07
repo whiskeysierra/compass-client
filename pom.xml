@@ -24,7 +24,7 @@
         <skipTests>false</skipTests>
         <skipUnitTests>${skipTests}</skipUnitTests>
         <riptide.version>2.11.0</riptide.version>
-        <jackson.version>2.10.0</jackson.version>
+        <jackson.version>2.12.4</jackson.version>
     </properties>
     <dependencies>
         <dependency>
